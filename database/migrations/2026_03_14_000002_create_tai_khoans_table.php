@@ -6,18 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tai_khoans', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('ma_tk')->unique()->nullable();
+            $table->string('ho_ten');
             $table->string('email')->unique();
+            $table->string('mat_khau');
+            $table->string('so_dien_thoai', 20)->nullable();
+            $table->string('dia_chi')->nullable();
+            $table->string('avatar')->nullable();
+            $table->foreignId('vai_tro_id')->constrained('vai_tros')->cascadeOnDelete();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('trang_thai', 30)->default('hoat_dong');
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -37,13 +42,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('tai_khoans');
     }
 };
